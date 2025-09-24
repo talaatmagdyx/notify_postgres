@@ -76,7 +76,6 @@ def get_engagements():
             SELECT id, channel, user_identifier, status, created_at, text, engagement_id
             FROM eng_interactions 
             ORDER BY created_at DESC 
-            LIMIT 50
         """
         cursor.execute(query)
         
