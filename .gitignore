@@ -1,0 +1,21 @@
+# Add .venv to .gitignore to exclude virtual environment from version control
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.DS_Store
+*.log
+.env
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.coverage
+htmlcov/
