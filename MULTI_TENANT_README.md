@@ -1,38 +1,52 @@
 # Multi-Tenant PostgreSQL Notification System
 
-A comprehensive multi-tenant notification system supporting multiple companies with separate schemas, frontends, and backends.
+A comprehensive multi-tenant notification system with **unified frontend** and **enhanced data generation** supporting multiple companies with separate schemas and backends.
 
 ## 🏢 Architecture Overview
 
-This system supports **3 companies** with complete isolation:
+This system supports **3 companies** with **unified frontend** and **separate backends**:
 
-| Company | Schema | Frontend Port | Backend Port | Theme Color |
-|---------|--------|---------------|--------------|-------------|
-| **Company Alpha** | `company_a` | 3001 | 5001 | WhatsApp Green (#25D366) |
-| **Company Beta** | `company_b` | 3002 | 5002 | Twitter Blue (#1DA1F2) |
-| **Company Gamma** | `company_c` | 3003 | 5003 | Facebook Blue (#4267B2) |
+| Company | Schema | Backend Port | Industry | Theme Color | Channels |
+|---------|--------|--------------|----------|-------------|----------|
+| **TechFlow Solutions** | `company_a` | 5001 | Technology | WhatsApp Green (#25D366) | WhatsApp, Email |
+| **SocialMedia Pro** | `company_b` | 5002 | Social Media Marketing | Twitter Blue (#1DA1F2) | Twitter, Facebook |
+| **OmniChannel Corp** | `company_c` | 5003 | E-commerce | Facebook Blue (#4267B2) | All Channels |
 
 ## 🚀 Quick Start
 
 ### 1. Setup Multi-Tenant Database
 ```bash
-./services/multi_tenant_manager.sh setup
+make setup
 ```
 
-### 2. Start All Company Services
+### 2. Start Multi-Tenant Services
 ```bash
-./services/multi_tenant_manager.sh start all
+make start-multi
 ```
 
-### 3. Generate Test Data
+### 3. Generate Realistic Test Data
 ```bash
-./services/multi_tenant_manager.sh generate
+make generate
 ```
 
-### 4. Access Frontends
-- **Company Alpha**: http://localhost:3001
-- **Company Beta**: http://localhost:3002  
-- **Company Gamma**: http://localhost:3003
+### 4. Access Unified Frontend
+- **Unified Frontend**: http://localhost:3000 (Company switching interface)
+
+## 🎨 Unified Frontend Architecture
+
+### Single Frontend with Company Switching
+- **One React App**: Handles all companies dynamically
+- **Company Switcher**: Easy switching between companies
+- **Dynamic Themes**: Company-specific colors and branding
+- **Real-time Updates**: Company-specific WebSocket connections
+- **Analytics Dashboard**: Comprehensive metrics per company
+
+### Frontend Features
+- **Modern Glass-Morphism UI**: Beautiful, modern design
+- **Real-time Notifications**: Animated notification system
+- **Company-Specific Data**: Isolated data per company
+- **Responsive Design**: Works on all devices
+- **Analytics Integration**: Rich metrics and KPIs
 
 ## 📊 Database Schema
 
@@ -102,36 +116,40 @@ Each company schema includes:
 ./services/multi_tenant_manager.sh restart comp_a
 ```
 
-## 📱 Frontend Configuration
+## 📱 Unified Frontend Configuration
 
-Each company has its own frontend configuration:
+### Single React App with Dynamic Company Support
+- **Main File**: `services/frontend/src/App.tsx`
+- **Port**: 3000 (Unified)
+- **Company Switching**: Dynamic routing and theming
+- **Real-time Updates**: Company-specific WebSocket connections
 
-### Company Alpha (COMP_A)
-- **File**: `services/frontend/src/App_CompanyA.tsx`
-- **Port**: 3001
-- **Backend**: http://localhost:5001
-- **Theme**: WhatsApp Green
-- **Channels**: WhatsApp, Email
+### Company Configurations
+- **TechFlow Solutions**: Backend 5001, WhatsApp Green theme, WhatsApp/Email channels
+- **SocialMedia Pro**: Backend 5002, Twitter Blue theme, Twitter/Facebook channels  
+- **OmniChannel Corp**: Backend 5003, Facebook Blue theme, All channels
 
-### Company Beta (COMP_B)
-- **File**: `services/frontend/src/App_CompanyB.tsx`
-- **Port**: 3002
-- **Backend**: http://localhost:5002
-- **Theme**: Twitter Blue
-- **Channels**: Twitter, Facebook
+### Frontend Features
+- **Modern UI**: Glass-morphism design with beautiful animations
+- **Company Switcher**: Easy switching between companies
+- **Real-time Notifications**: Animated notification system
+- **Analytics Dashboard**: Comprehensive metrics and KPIs
+- **Responsive Design**: Works on all devices
 
-### Company Gamma (COMP_C)
-- **File**: `services/frontend/src/App_CompanyC.tsx`
-- **Port**: 3003
-- **Backend**: http://localhost:5003
-- **Theme**: Facebook Blue
-- **Channels**: All (WhatsApp, Twitter, Facebook, Email)
+## 🎭 Enhanced Data Generation with Faker
 
-## 🔄 Data Generation
-
-### Generate Data for All Companies
+### Generate Realistic Test Data
 ```bash
-./services/multi_tenant_manager.sh generate
+# Generate data for all companies
+make generate
+
+# Generate data for specific companies
+make generate-alpha    # TechFlow Solutions
+make generate-beta     # SocialMedia Pro  
+make generate-gamma    # OmniChannel Corp
+
+# Generate large datasets
+make generate-large
 ```
 
 ### Manual Data Generation
@@ -140,11 +158,18 @@ cd services/database
 python multi_tenant_generator.py
 ```
 
+### Data Generation Features
+- **Realistic User Data**: International phone numbers, emails, social media handles
+- **Industry-Specific Content**: Technology, Social Media Marketing, E-commerce
+- **Intelligent Distribution**: Recent bias, weekday patterns, status distribution
+- **Rich Metadata**: Location, device, browser, customer tier information
+- **Multi-Locale Support**: US, GB, CA, AU locales for diverse data
+
 ### Data Generation Options
 1. Generate data for all companies (20 interactions each)
-2. Generate data for Company A only
-3. Generate data for Company B only
-4. Generate data for Company C only
+2. Generate data for TechFlow Solutions only
+3. Generate data for SocialMedia Pro only
+4. Generate data for OmniChannel Corp only
 5. Generate large dataset for all companies (50 interactions each)
 
 ## 🌐 API Endpoints
