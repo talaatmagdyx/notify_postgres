@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  database:
+    image: postgres:15-alpine
+    container_name: notify_postgres_db
+    environment:
+      POSTGRES_DB: notify_postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./services/database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API Service
+  backend:
+    build: ./services/backend
+    container_name: notify_postgres_backend
+    ports:
+      - "5001:5001"
+    environment:
+      DB_HOST: database
+      DB_PORT: 5432
+      DB_NAME: notify_postgres
+      DB_USER: postgres
+      DB_PASSWORD: password
+    depends_on:
+      database:
+        condition: service_healthy
+    volumes:
+      - ./services/backend:/app
+    restart: unless-stopped
+
+  # Frontend Service
+  frontend:
+    build: ./services/frontend
+    container_name: notify_postgres_frontend
+    ports:
+      - "3000:3000"
+    environment:
+      REACT_APP_API_URL: http://localhost:5001
+      REACT_APP_WS_URL: ws://localhost:5001
+    depends_on:
+      - backend
+    volumes:
+      - ./services/frontend:/app
+    restart: unless-stopped
+
+  # Notification Engine
+  notification-engine:
+    build: ./services/notification-engine
+    container_name: notify_postgres_engine
+    environment:
+      DB_HOST: database
+      DB_PORT: 5432
+      DB_NAME: notify_postgres
+      DB_USER: postgres
+      DB_PASSWORD: password
+    depends_on:
+      database:
+        condition: service_healthy
+    volumes:
+      - ./services/notification-engine:/app
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
